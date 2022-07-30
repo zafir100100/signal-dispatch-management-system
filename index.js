@@ -2,7 +2,7 @@ const express = require('express');
 const Sequelize = require('sequelize');
 const app = express();
 const port = 8090;
-var cors = require('cors');
+const cors = require('cors');
 
 app.use(cors());
 app.use(express.json());
