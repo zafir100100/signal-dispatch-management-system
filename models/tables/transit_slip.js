@@ -1,35 +1,51 @@
-const sequelize = require('../../utils/db-connection');
-const Sequelize = require('sequelize');
+const sequelize = require("../../utils/db-connection");
+const Sequelize = require("sequelize");
 
-const TransitSlip = sequelize.define('transit_slip', {
+const DespatchEnvelop = sequelize.define(
+  "despatch_envelop",
+  {
     id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true
+      type: Sequelize.INTEGER,
+      primaryKey: true,
     },
-    transit_slip_no: {
-        type: Sequelize.STRING,
+    letter_no: {
+      type: Sequelize.STRING,
     },
-    transit_from: {
-        type: Sequelize.STRING,
+    date_time_group: {
+      type: Sequelize.STRING,
     },
-    transit_to: {
-        type: Sequelize.STRING,
+    originator_no: {
+      type: Sequelize.STRING,
     },
-    transit_method: {
-        type: Sequelize.STRING,
+    from_address: {
+      type: Sequelize.STRING,
     },
-    name_of_courier: {
-        type: Sequelize.STRING,
+    to_address: {
+      type: Sequelize.STRING,
     },
-    transit_date: {
-        type: Sequelize.STRING,
-    }
-}, {
+    precedance: {
+      type: Sequelize.STRING,
+    },
+    time_of_receive: {
+      type: Sequelize.STRING,
+    },
+    despatch_status: {
+      type: Sequelize.STRING,
+    },
+    despatch_type: {
+      type: Sequelize.STRING,
+    },
+    time_of_delivery: {
+      type: Sequelize.STRING,
+    },
+  },
+  {
     freezeTableName: true,
+  }
+);
+
+DespatchEnvelop.sync({
+  force: false,
 });
 
-TransitSlip.sync({
-    force: false
-});
-
-module.exports = TransitSlip;
+module.exports = DespatchEnvelop;

@@ -1,47 +1,51 @@
-const sequelize = require('../../utils/db-connection');
-const Sequelize = require('sequelize');
+const sequelize = require("../../utils/db-connection");
+const Sequelize = require("sequelize");
 
-const DespatchEnvelop = sequelize.define('despatch_envelop', {
+const DespatchEnvelop = sequelize.define(
+  "despatch_envelop",
+  {
     id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true
+      type: Sequelize.INTEGER,
+      primaryKey: true,
     },
     letter_no: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     date_time_group: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     originator_no: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     from_address: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     to_address: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     precedance: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     time_of_receive: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     despatch_status: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     despatch_type: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     time_of_delivery: {
-        type: Sequelize.STRING,
-    }
-}, {
+      type: Sequelize.STRING,
+    },
+  },
+  {
     freezeTableName: true,
-});
+  }
+);
 
 DespatchEnvelop.sync({
-    force: false
+  force: false,
 });
 
 module.exports = DespatchEnvelop;
