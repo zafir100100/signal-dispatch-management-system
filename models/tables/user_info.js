@@ -1,39 +1,47 @@
 const sequelize = require("../../utils/db-connection");
 const Sequelize = require("sequelize");
 
-const TransitSlip = sequelize.define(
-  "transit_slip",
+const User = sequelize.define(
+  'user_info',
   {
     id: {
       type: Sequelize.INTEGER,
-      primaryKey: true,
+      primaryKey: true
     },
-    transit_slip_no: {
+    user_full_name: {
       type: Sequelize.STRING,
     },
-    transit_from: {
+    user_name: {
       type: Sequelize.STRING,
     },
-    transit_to: {
+    user_password: {
       type: Sequelize.STRING,
     },
-    transit_method: {
+    user_email: {
       type: Sequelize.STRING,
     },
-    name_of_courier: {
+    user_army_number: {
       type: Sequelize.STRING,
     },
-    transit_date: {
+    user_rank: {
       type: Sequelize.STRING,
     },
-  },
-  {
-    freezeTableName: true,
-  }
-);
-
-TransitSlip.sync({
-  force: false,
+    user_role: {
+      type: Sequelize.STRING,
+    },
+    user_serving_unit: {
+      type: Sequelize.STRING,
+    },
+    user_status: {
+      type: Sequelize.STRING,
+    }
+  }, {
+  freezeTableName: true,
 });
 
-module.exports = TransitSlip;
+User.sync({
+  force: false
+});
+
+module.exports = User;
+

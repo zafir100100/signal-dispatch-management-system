@@ -1,41 +1,29 @@
 const sequelize = require("../../utils/db-connection");
 const Sequelize = require("sequelize");
 
-const DespatchEnvelop = sequelize.define(
-  "despatch_envelop",
+const TransitSlip = sequelize.define(
+  "transit_slip",
   {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
     },
-    letter_no: {
+    transit_slip_no: {
       type: Sequelize.STRING,
     },
-    date_time_group: {
+    transit_from: {
       type: Sequelize.STRING,
     },
-    originator_no: {
+    transit_to: {
       type: Sequelize.STRING,
     },
-    from_address: {
+    transit_method: {
       type: Sequelize.STRING,
     },
-    to_address: {
+    name_of_courier: {
       type: Sequelize.STRING,
     },
-    precedance: {
-      type: Sequelize.STRING,
-    },
-    time_of_receive: {
-      type: Sequelize.STRING,
-    },
-    despatch_status: {
-      type: Sequelize.STRING,
-    },
-    despatch_type: {
-      type: Sequelize.STRING,
-    },
-    time_of_delivery: {
+    transit_date: {
       type: Sequelize.STRING,
     },
   },
@@ -44,8 +32,8 @@ const DespatchEnvelop = sequelize.define(
   }
 );
 
-DespatchEnvelop.sync({
+TransitSlip.sync({
   force: false,
 });
 
-module.exports = DespatchEnvelop;
+module.exports = TransitSlip;
