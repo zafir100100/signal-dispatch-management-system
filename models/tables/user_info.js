@@ -1,43 +1,22 @@
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require("../../utils/db-connection");
-const Sequelize = require("sequelize");
 
-const User = sequelize.define(
-  'user_info',
-  {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true
-    },
-    user_full_name: {
-      type: Sequelize.STRING,
-    },
-    user_name: {
-      type: Sequelize.STRING,
-    },
-    user_password: {
-      type: Sequelize.STRING,
-    },
-    user_email: {
-      type: Sequelize.STRING,
-    },
-    user_army_number: {
-      type: Sequelize.STRING,
-    },
-    user_rank: {
-      type: Sequelize.STRING,
-    },
-    user_role: {
-      type: Sequelize.STRING,
-    },
-    user_serving_unit: {
-      type: Sequelize.STRING,
-    },
-    user_status: {
-      type: Sequelize.STRING,
-    }
-  }, {
-  freezeTableName: true,
-});
+class User extends Model { }
+User.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true
+  },
+  user_full_name: DataTypes.STRING,
+  user_name: DataTypes.STRING,
+  user_password: DataTypes.STRING,
+  user_email: DataTypes.STRING,
+  user_army_number: DataTypes.STRING,
+  user_rank: DataTypes.STRING,
+  user_role: DataTypes.STRING,
+  user_serving_unit: DataTypes.STRING,
+  user_status: DataTypes.STRING
+}, { sequelize, freezeTableName: true, tableName: 'user_info' });
 
 User.sync({
   force: false
