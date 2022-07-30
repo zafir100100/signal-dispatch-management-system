@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const port = 8090;
 const cors = require("cors");
-const userService = require("./repositories/user-repository");
+const userService = require("./repositories/user-info-repository");
 const transitSlipService = require("./repositories/transit-slip-repository");
-const despatchEnvelopService = require("./repositories/despatch-envelop");
+const despatchEnvelopService = require("./repositories/despatch-envelop-repository");
 
 app.use(cors());
 app.use(express.json());
