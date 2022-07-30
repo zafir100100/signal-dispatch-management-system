@@ -3,7 +3,7 @@ let despatchEnvelopDb = require('../models/tables/despatch_envelop');
 let despatchEnvelops = module.exports = {};
 
 despatchEnvelops.create = (req, res) =>
-despatchEnvelopDb.create({
+    despatchEnvelopDb.create({
         id: req.body.id,
         transit_slip_no: req.body.transit_slip_no,
         transit_from: req.body.transit_from,
