@@ -18,6 +18,7 @@ const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
     define: {
         timestamps: false
     },
+    logging: (...msg) => console.log(msg)
 });
 
 sequelize
@@ -32,6 +33,7 @@ sequelize
 const User = sequelize.define('user_info', {
     id: {
         type: Sequelize.INTEGER,
+        primaryKey: true
     },
     user_full_name: {
         type: Sequelize.STRING,
@@ -71,6 +73,7 @@ User.sync({
 const DespatchEnvelop = sequelize.define('despatch_envelop', {
     id: {
         type: Sequelize.INTEGER,
+        primaryKey: true
     },
     letter_no: {
         type: Sequelize.STRING,
@@ -113,6 +116,7 @@ DespatchEnvelop.sync({
 const TransitSlip = sequelize.define('transit_slip', {
     id: {
         type: Sequelize.INTEGER,
+        primaryKey: true
     },
     transit_slip_no: {
         type: Sequelize.STRING,
@@ -161,7 +165,7 @@ app.post("/create-user", (req, res) =>
 
 app.post("/create-user", (req, res) =>
     User.create({
-        id: req.body.id,
+        id: User.max('id') ?? 1,
         user_full_name: req.body.user_full_name,
         user_name: req.body.user_name,
         user_password: req.body.user_password,
