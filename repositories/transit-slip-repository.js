@@ -1,15 +1,40 @@
-const transitSlipDb = require('../models/tables/transit_slip');
+const TransitSlip = require('../models/tables/transit_slip');
+const ResponseDto = require("../models/DTOs/ResponseDto");
+const sequelize = require("../utils/db-connection");
 
-const transitSlips = (module.exports = {});
+const transitSlipRepository = (module.exports = {});
 
-transitSlips.create = (req, res) => transitSlipDb
-  .create({
-    id: req.body.id,
-    transit_slip_no: req.body.transit_slip_no,
-    transit_from: req.body.transit_from,
-    transit_to: req.body.transit_to,
-    transit_method: req.body.transit_method,
-    name_of_courier: req.body.name_of_courier,
-    transit_date: req.body.transit_date,
-  })
-  .then((result) => res.json(result));
+async function createTransitSlip(req) {
+  const output = new ResponseDto();
+  try {
+    const result = await sequelize.transaction(async (t) => {
+      const maxId = ((await TransitSlip.max("id")) ?? 0) + 1;
+      req.body.id = maxId;
+      const user = await TransitSlip.create(
+        req.body,
+        { transaction: t }
+      );
+
+      output.message = "Transit Slip Creation Successful.";
+      output.isSuccess = true;
+      output.statusCode = 200;
+      output.payload = {
+        output: user,
+      };
+    });
+
+    return output;
+  } catch (error) {
+    output.payload = {
+      errorDetails: error,
+    };
+
+    return output;
+  }
+}
+
+transitSlipRepository.create = async function (req, res) {
+  const output = await createTransitSlip(req);
+  res.status(output.statusCode);
+  res.send(output);
+};

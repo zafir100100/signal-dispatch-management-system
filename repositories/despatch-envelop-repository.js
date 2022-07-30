@@ -1,20 +1,40 @@
-let despatchEnvelopDb = require("../models/tables/despatch_envelop");
+let DespatchEnvelop = require("../models/tables/despatch_envelop");
+const ResponseDto = require("../models/DTOs/ResponseDto");
+const sequelize = require("../utils/db-connection");
 
-let despatchEnvelops = (module.exports = {});
+let despatchEnvelopRepository = (module.exports = {});
 
-despatchEnvelops.create = (req, res) =>
-  despatchEnvelopDb
-    .create({
-      id: req.body.id,
-      letter_no: req.body.letter_no,
-      date_time_group: req.body.date_time_group,
-      originator_no: req.body.originator_no,
-      from_address: req.body.from_address,
-      to_address: req.body.to_address,
-      precedance: req.body.precedance,
-      time_of_receive: req.body.precedance,
-      despatch_status: req.body.precedance,
-      despatch_type: req.body.precedance,
-      time_of_delivery: req.body.precedance
-    })
-    .then((result) => res.json(result));
+async function createDespatchEnvelop(req) {
+  const output = new ResponseDto();
+  try {
+    const result = await sequelize.transaction(async (t) => {
+      const maxId = ((await DespatchEnvelop.max("id")) ?? 0) + 1;
+      req.body.id = maxId;
+      const user = await DespatchEnvelop.create(
+        req.body,
+        { transaction: t }
+      );
+
+      output.message = "Despatch Envelop Creation Successful.";
+      output.isSuccess = true;
+      output.statusCode = 200;
+      output.payload = {
+        output: user,
+      };
+    });
+
+    return output;
+  } catch (error) {
+    output.payload = {
+      errorDetails: error,
+    };
+
+    return output;
+  }
+}
+
+despatchEnvelopRepository.create = async function (req, res) {
+  const output = await createDespatchEnvelop(req);
+  res.status(output.statusCode);
+  res.send(output);
+};

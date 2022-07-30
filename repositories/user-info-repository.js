@@ -8,14 +8,12 @@ async function createUser(req) {
   const output = new ResponseDto();
   try {
     const result = await sequelize.transaction(async (t) => {
-      const maxUserId = ((await User.max("id")) ?? 0) + 1;
-      req.body.id = maxUserId;
+      const maxId = ((await User.max("id")) ?? 0) + 1;
+      req.body.id = maxId;
       const user = await User.create(
         req.body,
         { transaction: t }
       );
-
-      console.log(req.body);
 
       output.message = "User Creation Successful.";
       output.isSuccess = true;
