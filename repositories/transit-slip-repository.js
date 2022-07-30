@@ -1,6 +1,3 @@
-/* eslint-disable no-multi-assign */
-/* eslint-disable linebreak-style */
-
 const transitSlipDb = require('../models/tables/transit_slip');
 
 const transitSlips = (module.exports = {});
