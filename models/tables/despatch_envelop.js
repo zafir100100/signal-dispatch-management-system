@@ -1,48 +1,23 @@
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require("../../utils/db-connection");
-const Sequelize = require("sequelize");
 
-const DespatchEnvelop = sequelize.define(
-  "despatch_envelop",
-  {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-    },
-    letter_no: {
-      type: Sequelize.STRING,
-    },
-    date_time_group: {
-      type: Sequelize.STRING,
-    },
-    originator_no: {
-      type: Sequelize.STRING,
-    },
-    from_address: {
-      type: Sequelize.STRING,
-    },
-    to_address: {
-      type: Sequelize.STRING,
-    },
-    precedance: {
-      type: Sequelize.STRING,
-    },
-    time_of_receive: {
-      type: Sequelize.STRING,
-    },
-    despatch_status: {
-      type: Sequelize.STRING,
-    },
-    despatch_type: {
-      type: Sequelize.STRING,
-    },
-    time_of_delivery: {
-      type: Sequelize.STRING,
-    },
+class DespatchEnvelop extends Model { }
+DespatchEnvelop.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true
   },
-  {
-    freezeTableName: true,
-  }
-);
+  letter_no: DataTypes.STRING,
+  date_time_group: DataTypes.STRING,
+  originator_no: DataTypes.STRING,
+  from_address: DataTypes.STRING,
+  to_address: DataTypes.STRING,
+  precedance: DataTypes.STRING,
+  time_of_receive: DataTypes.STRING,
+  despatch_status: DataTypes.STRING,
+  despatch_type: DataTypes.STRING,
+  time_of_delivery: DataTypes.STRING
+}, { sequelize, tableName: 'despatch_envelop', freezeTableName: true });
 
 DespatchEnvelop.sync({
   force: false,

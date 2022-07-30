@@ -6,11 +6,15 @@ despatchEnvelops.create = (req, res) =>
   despatchEnvelopDb
     .create({
       id: req.body.id,
-      transit_slip_no: req.body.transit_slip_no,
-      transit_from: req.body.transit_from,
-      transit_to: req.body.transit_to,
-      transit_method: req.body.transit_method,
-      name_of_courier: req.body.name_of_courier,
-      transit_date: req.body.transit_date,
+      letter_no: req.body.letter_no,
+      date_time_group: req.body.date_time_group,
+      originator_no: req.body.originator_no,
+      from_address: req.body.from_address,
+      to_address: req.body.to_address,
+      precedance: req.body.precedance,
+      time_of_receive: req.body.precedance,
+      despatch_status: req.body.precedance,
+      despatch_type: req.body.precedance,
+      time_of_delivery: req.body.precedance
     })
     .then((result) => res.json(result));

@@ -1,36 +1,19 @@
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require("../../utils/db-connection");
-const Sequelize = require("sequelize");
 
-const TransitSlip = sequelize.define(
-  "transit_slip",
-  {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-    },
-    transit_slip_no: {
-      type: Sequelize.STRING,
-    },
-    transit_from: {
-      type: Sequelize.STRING,
-    },
-    transit_to: {
-      type: Sequelize.STRING,
-    },
-    transit_method: {
-      type: Sequelize.STRING,
-    },
-    name_of_courier: {
-      type: Sequelize.STRING,
-    },
-    transit_date: {
-      type: Sequelize.STRING,
-    },
+class TransitSlip extends Model { }
+TransitSlip.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true
   },
-  {
-    freezeTableName: true,
-  }
-);
+  transit_slip_no: DataTypes.STRING,
+  transit_from: DataTypes.STRING,
+  transit_to: DataTypes.STRING,
+  transit_method: DataTypes.STRING,
+  name_of_courier: DataTypes.STRING,
+  transit_date: DataTypes.STRING
+}, { sequelize, tableName: 'transit_slip', freezeTableName: true });
 
 TransitSlip.sync({
   force: false,

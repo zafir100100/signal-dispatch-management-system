@@ -16,7 +16,7 @@ User.init({
   user_role: DataTypes.STRING,
   user_serving_unit: DataTypes.STRING,
   user_status: DataTypes.STRING
-}, { sequelize, freezeTableName: true, tableName: 'user_info' });
+}, { sequelize, tableName: 'user_info', freezeTableName: true });
 
 User.sync({
   force: false
