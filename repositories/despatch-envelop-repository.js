@@ -185,11 +185,11 @@ async function updateDespatchEnvelopById(req) {
     }
 }
 
-async function getTDespatchEnvelopByCreatedBy(req) {
+async function getDespatchEnvelopByCreatedBy(req) {
     const output = new ResponseDto();
     try {
         const result = await sequelize.transaction(async (t) => {
-            const despatchEnvelop = await TransitSlip.findAll({
+            const despatchEnvelop = await DespatchEnvelop.findAll({
                 where: {
                     created_by: req.body.created_by,
                 },
@@ -220,11 +220,11 @@ async function getTDespatchEnvelopByCreatedBy(req) {
     }
 }
 
-async function getTDespatchEnvelopByCreatedFor(req) {
+async function getDespatchEnvelopByCreatedFor(req) {
     const output = new ResponseDto();
     try {
         const result = await sequelize.transaction(async (t) => {
-            const despatchEnvelop = await TransitSlip.findAll({
+            const despatchEnvelop = await DespatchEnvelop.findAll({
                 where: {
                     created_for: req.body.created_for,
                 },
@@ -274,13 +274,13 @@ despatchEnvelopRepository.getByLetterNo = async function (req, res) {
 };
 
 despatchEnvelopRepository.getByCreatedBy = async function (req, res) {
-    const output = await getTDespatchEnvelopByCreatedBy(req);
+    const output = await getDespatchEnvelopByCreatedBy(req);
     res.status(output.statusCode);
     res.send(output);
 };
 
 despatchEnvelopRepository.getByCreatedFor = async function (req, res) {
-    const output = await getTDespatchEnvelopByCreatedFor(req);
+    const output = await getDespatchEnvelopByCreatedFor(req);
     res.status(output.statusCode);
     res.send(output);
 };
