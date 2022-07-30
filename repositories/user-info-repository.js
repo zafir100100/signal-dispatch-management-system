@@ -1,19 +1,71 @@
-let userDb = require("../models/tables/user_info");
+const User = require("../models/tables/user_info");
+const ResponseDto = require("../models/DTOs/ResponseDto");
+const sequelize = require("../utils/db-connection");
 
-let users = (module.exports = {});
+let userRepository = (module.exports = {});
 
-users.create = (req, res) =>
-  userDb
-    .create({
-      id: req.body.id,
-      user_full_name: req.body.user_full_name,
-      user_name: req.body.user_name,
-      user_password: req.body.user_password,
-      user_email: req.body.user_email,
-      user_army_number: req.body.user_army_number,
-      user_rank: req.body.user_rank,
-      user_role: req.body.user_role,
-      user_serving_unit: req.body.user_serving_unit,
-      user_status: req.body.user_status,
-    })
-    .then((result) => res.json(result));
+async function createUser(req) {
+const output = new ResponseDto();
+try {
+
+  const result = await sequelize.transaction(async (t) => {
+
+    const maxUserId = (await User.max('id') ?? 0)+1; 
+    const user = await User.create({
+      id: maxUserId,
+      user_full_name: 'Abraham',
+      user_name: 'hi'
+    }, { transaction: t });
+
+
+    output.message = "User Creation Successful."
+    output.isSuccess = true;
+    output.statusCode = 200;
+    output.payload = {
+      output: user
+    }
+  });
+
+  return output;
+
+
+} catch (error) {
+  console.log('x xxxxx x');
+  console.log(error);
+  output.payload = {
+    errorDetails: error
+  }
+
+  return output;
+
+}
+}
+
+userRepository.create = async function(req,res){     
+  const output = await createUser(req);
+  res.status(output.statusCode);
+  res.send(output);
+}
+
+// async function register() {
+  
+//   try {
+//       await sequelize.transaction(async function (transaction) {
+//           // chain all your queries here. make sure you return them.
+//           const user = await User.create({
+//               name: 'Van Helsing'
+//           }, { transaction });
+          
+//           await ShippingAddress.create({
+//               address: 'Transylvania',
+//               user_id: user.id
+//           }, { transaction });
+          
+//           return user;
+//       });
+//       console.log('success');
+//   } catch (error) {
+//       console.log('error');
+//   }
+//   return null;
+// }
