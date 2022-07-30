@@ -312,7 +312,7 @@ userRepository.getById = async function (req, res) {
 };
 
 userRepository.getAll = async function (req, res) {
-    const output = await getAllUser(req);
+    const output = await getAllUser();
     res.status(output.statusCode);
     res.send(output);
 };
