@@ -1,6 +1,5 @@
-const conn = require("../../utils/db-connection");
-const sequelize = conn.sequelize;
-const Sequelize = conn.Sequelize;
+const sequelize = require("../../utils/db-connection");
+const Sequelize = require("sequelize");
 
 const TransitSlip = sequelize.define(
   "transit_slip",
