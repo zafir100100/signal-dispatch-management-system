@@ -11,7 +11,7 @@ const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   define: {
     timestamps: false,
   },
-  logging: (...msg) => console.log(msg),
+  // logging: (...msg) => console.log(msg),
 });
 
 try {
