@@ -16,7 +16,8 @@ DespatchEnvelop.init({
   time_of_receive: DataTypes.STRING,
   despatch_status: DataTypes.STRING,
   despatch_type: DataTypes.STRING,
-  time_of_delivery: DataTypes.STRING
+  time_of_delivery: DataTypes.STRING,
+  created_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'despatch_envelop', freezeTableName: true });
 
 DespatchEnvelop.sync({

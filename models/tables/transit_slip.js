@@ -12,7 +12,9 @@ TransitSlip.init({
   transit_to: DataTypes.STRING,
   transit_method: DataTypes.STRING,
   name_of_courier: DataTypes.STRING,
-  transit_date: DataTypes.STRING
+  transit_date: DataTypes.STRING,
+  created_by: DataTypes.INTEGER,
+  created_for: DataTypes.INTEGER
 }, { sequelize, tableName: 'transit_slip', freezeTableName: true });
 
 TransitSlip.sync({
