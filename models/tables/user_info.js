@@ -2,11 +2,11 @@ const sequelize = require("../../utils/db-connection");
 const Sequelize = require("sequelize");
 
 const User = sequelize.define(
-  'user_info',
+  "user_info",
   {
     id: {
       type: Sequelize.INTEGER,
-      primaryKey: true
+      primaryKey: true,
     },
     user_full_name: {
       type: Sequelize.STRING,
@@ -34,14 +34,15 @@ const User = sequelize.define(
     },
     user_status: {
       type: Sequelize.STRING,
-    }
-  }, {
-  freezeTableName: true,
-});
+    },
+  },
+  {
+    freezeTableName: true,
+  }
+);
 
 User.sync({
-  force: false
+  force: false,
 });
 
 module.exports = User;
-
