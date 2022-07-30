@@ -144,4 +144,62 @@ app.get('/', (req, res) => res.json({
     message: 'Hello World'
 }));
 
+app.post("/create-user", (req, res) =>
+    User.create({
+        id: req.body.id,
+        user_full_name: req.body.user_full_name,
+        user_name: req.body.user_name,
+        user_password: req.body.user_password,
+        user_email: req.body.user_email,
+        user_army_number: req.body.user_army_number,
+        user_rank: req.body.user_rank,
+        user_role: req.body.user_role,
+        user_serving_unit: req.body.user_serving_unit,
+        user_status: req.body.user_status
+    }).then((result) => res.json(result))
+);
+
+app.post("/create-user", (req, res) =>
+    User.create({
+        id: req.body.id,
+        user_full_name: req.body.user_full_name,
+        user_name: req.body.user_name,
+        user_password: req.body.user_password,
+        user_email: req.body.user_email,
+        user_army_number: req.body.user_army_number,
+        user_rank: req.body.user_rank,
+        user_role: req.body.user_role,
+        user_serving_unit: req.body.user_serving_unit,
+        user_status: req.body.user_status
+    }).then((result) => res.json(result))
+);
+
+app.post("/create-despatch-envelop", (req, res) =>
+    DespatchEnvelop.create({
+        id: req.body.id,
+        letter_no: req.body.letter_no,
+        date_time_group: req.body.date_time_group,
+        originator_no: req.body.originator_no,
+        from_address: req.body.from_address,
+        to_address: req.body.to_address,
+        precedance: req.body.precedance,
+        time_of_receive: req.body.time_of_receive,
+        despatch_status: req.body.despatch_status,
+        despatch_type: req.body.despatch_type,
+        time_of_delivery: req.body.time_of_delivery
+    }).then((result) => res.json(result))
+);
+
+app.post("/create-transit-slip", (req, res) =>
+    TransitSlip.create({
+        id: req.body.id,
+        transit_slip_no: req.body.transit_slip_no,
+        transit_from: req.body.transit_from,
+        transit_to: req.body.transit_to,
+        transit_method: req.body.transit_method,
+        name_of_courier: req.body.name_of_courier,
+        transit_date: req.body.transit_date
+    }).then((result) => res.json(result))
+);
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
