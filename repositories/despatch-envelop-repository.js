@@ -1,165 +1,243 @@
-let DespatchEnvelop = require("../models/tables/despatch_envelop");
-const ResponseDto = require("../models/DTOs/ResponseDto");
-const sequelize = require("../utils/db-connection");
+const DespatchEnvelop = require('../models/tables/despatch_envelop');
+const ResponseDto = require('../models/DTOs/ResponseDto');
+const sequelize = require('../utils/db-connection');
 
-let despatchEnvelopRepository = (module.exports = {});
+const despatchEnvelopRepository = (module.exports = {});
 
 async function createDespatchEnvelop(req) {
-  const output = new ResponseDto();
-  try {
-    const result = await sequelize.transaction(async (t) => {
-      const maxId = ((await DespatchEnvelop.max("id")) ?? 0) + 1;
-      req.body.id = maxId;
-      const user = await DespatchEnvelop.create(
-        req.body,
-        { transaction: t }
-      );
+    const output = new ResponseDto();
+    try {
+        const result = await sequelize.transaction(async (t) => {
+            const letterNoCheck = await DespatchEnvelop.findOne({
+                where: {
+                    letter_no: req.body.letter_no,
+                },
+            });
 
-      output.message = "Despatch Envelop Creation Successful.";
-      output.isSuccess = true;
-      output.statusCode = 200;
-      output.payload = {
-        output: user,
-      };
-    });
+            if (letterNoCheck) {
+                output.message = 'The given letter no already exists.';
+                output.statusCode = 409;
+                return output;
+            }
+            const maxId = ((await DespatchEnvelop.max('id')) ?? 0) + 1;
+            req.body.id = maxId;
+            const despatchEnvelop = await DespatchEnvelop.create(req.body, { transaction: t });
 
-    return output;
-  } catch (error) {
-    output.payload = {
-      errorDetails: error,
-    };
+            output.message = 'Despatch Envelop Creation Successful.';
+            output.isSuccess = true;
+            output.statusCode = 200;
+            output.payload = {
+                output: despatchEnvelop,
+            };
+        });
 
-    return output;
-  }
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
 }
 
 async function getDespatchEnvelopById(req) {
-  const output = new ResponseDto();
-  try {
-      const despatchEnvelop = await DespatchEnvelop.findOne({
-          where: {
-              id: req.body.id,
-          },
-      });
+    const output = new ResponseDto();
+    try {
+        const despatchEnvelop = await DespatchEnvelop.findOne({
+            where: {
+                id: req.body.id,
+            },
+        });
 
-      if (!despatchEnvelop) {
-          output.message = 'No despatch envelop found with the given id.';
-          output.statusCode = 404;
-          return output;
-      }
+        if (!despatchEnvelop) {
+            output.message = 'No despatch envelop found with the given id.';
+            output.statusCode = 404;
+            return output;
+        }
 
-      output.message = 'Despatch Envelop found with the given id.';
-      output.statusCode = 200;
-      output.payload = {
-          output: despatchEnvelop,
-      };
-      return output;
-  } catch (error) {
-      output.payload = {
-          errorDetails: error,
-      };
+        output.message = 'Despatch Envelop found with the given id.';
+        output.statusCode = 200;
+        output.payload = {
+            output: despatchEnvelop,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
 
-      return output;
-  }
+        return output;
+    }
 }
 
 async function getDespatchEnvelopByLetterNo(req) {
-  const output = new ResponseDto();
-  try {
-      const despatchEnvelop = await DespatchEnvelop.findOne({
-          where: {
-            letter_no: req.body.letter_no,
-          },
-      });
+    const output = new ResponseDto();
+    try {
+        const despatchEnvelop = await DespatchEnvelop.findOne({
+            where: {
+                letter_no: req.body.letter_no,
+            },
+        });
 
-      if (!despatchEnvelop) {
-          output.message = 'No Despatch Envelop found with the given letter no.';
-          output.statusCode = 404;
-          return output;
-      }
+        if (!despatchEnvelop) {
+            output.message = 'No Despatch Envelop found with the given letter no.';
+            output.statusCode = 404;
+            return output;
+        }
 
-      output.message = 'Despatch Envelop found with the given letter no.';
-      output.statusCode = 200;
-      output.payload = {
-          output: despatchEnvelop,
-      };
-      return output;
-  } catch (error) {
-      output.payload = {
-          errorDetails: error,
-      };
+        output.message = 'Despatch Envelop found with the given letter no.';
+        output.statusCode = 200;
+        output.payload = {
+            output: despatchEnvelop,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
 
-      return output;
-  }
+        return output;
+    }
 }
 
 async function deleteDespatchEnvelopById(req) {
-  const output = new ResponseDto();
-  try {
-      const result = await sequelize.transaction(async (t) => {
-          const despatchEnvelop = await DespatchEnvelop.findOne({
-              where: {
-                  id: req.body.id,
-              },
-              transaction: t,
-          });
+    const output = new ResponseDto();
+    try {
+        const result = await sequelize.transaction(async (t) => {
+            const despatchEnvelop = await DespatchEnvelop.findOne({
+                where: {
+                    id: req.body.id,
+                },
+                transaction: t,
+            });
 
-          if (!despatchEnvelop) {
-              output.message = 'No despatchEnvelop found with the given id.';
-              output.statusCode = 404;
-              return output;
-          }
+            if (!despatchEnvelop) {
+                output.message = 'No despatchEnvelop found with the given id.';
+                output.statusCode = 404;
+                return output;
+            }
 
-          await DespatchEnvelop.destroy({
-              where: {
-                  id: req.body.id,
-              },
-              transaction: t,
-          });
+            await DespatchEnvelop.destroy({
+                where: {
+                    id: req.body.id,
+                },
+                transaction: t,
+            });
 
-          output.message = 'Despatch Envelop Deletion Successful.';
-          output.isSuccess = true;
-          output.statusCode = 200;
-          output.payload = {
-              output: despatchEnvelop,
-          };
-      });
+            output.message = 'Despatch Envelop Deletion Successful.';
+            output.isSuccess = true;
+            output.statusCode = 200;
+            output.payload = {
+                output: despatchEnvelop,
+            };
+        });
 
-      return output;
-  } catch (error) {
-      output.payload = {
-          errorDetails: error,
-      };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
 
-      return output;
-  }
+        return output;
+    }
 }
 
 async function updateDespatchEnvelopById(req) {
+    const output = new ResponseDto();
+    try {
+        const result = await sequelize.transaction(async (t) => {
+            const despatchEnvelop = await DespatchEnvelop.findOne({
+                where: {
+                    id: req.body.id,
+                },
+                transaction: t,
+            });
+
+            if (!despatchEnvelop) {
+                output.message = 'No despatch envelop found with the given id.';
+                output.statusCode = 404;
+                return output;
+            }
+
+            await DespatchEnvelop.update(req.body, {
+                where: {
+                    id: req.body.id,
+                },
+                transaction: t,
+            });
+
+            output.message = 'Despatch Envelop Update Successful.';
+            output.isSuccess = true;
+            output.statusCode = 200;
+            output.payload = {
+                output: despatchEnvelop,
+            };
+        });
+
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
+async function getTDespatchEnvelopByCreatedBy(req) {
+    const output = new ResponseDto();
+    try {
+        const result = await sequelize.transaction(async (t) => {
+            const despatchEnvelop = await TransitSlip.findAll({
+                where: {
+                    created_by: req.body.created_by,
+                },
+                order: [['id', 'desc']],
+            });
+
+            if (!despatchEnvelop) {
+                output.message = 'No Despatch Envelop exists by the given criteria.';
+                output.statusCode = 409;
+                return output;
+            }
+
+            output.message = 'List of Despatch Envelop by the given user';
+            output.isSuccess = true;
+            output.statusCode = 200;
+            output.payload = {
+                output: despatchEnvelop,
+            };
+        });
+
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
+async function getTDespatchEnvelopByCreatedFor(req) {
   const output = new ResponseDto();
   try {
       const result = await sequelize.transaction(async (t) => {
-          const despatchEnvelop = await DespatchEnvelop.findOne({
+          const despatchEnvelop = await TransitSlip.findAll({
               where: {
-                  id: req.body.id,
+                  created_for: req.body.created_for,
               },
-              transaction: t,
+              order: [['id', 'desc']],
           });
 
           if (!despatchEnvelop) {
-              output.message = 'No despatch envelop found with the given id.';
-              output.statusCode = 404;
+              output.message = 'No Despatch Envelop exists by the given criteria.';
+              output.statusCode = 409;
               return output;
           }
 
-          await DespatchEnvelop.update(req.body, {
-              where: {
-                  id: req.body.id,
-              },
-              transaction: t,
-          });
-
-          output.message = 'Despatch Envelop Update Successful.';
+          output.message = 'List of Despatch Envelop for the given user';
           output.isSuccess = true;
           output.statusCode = 200;
           output.payload = {
@@ -178,32 +256,45 @@ async function updateDespatchEnvelopById(req) {
 }
 
 despatchEnvelopRepository.create = async function (req, res) {
-  const output = await createDespatchEnvelop(req);
-  res.status(output.statusCode);
-  res.send(output);
+    const output = await createDespatchEnvelop(req);
+    res.status(output.statusCode);
+    res.send(output);
 };
 
 despatchEnvelopRepository.getById = async function (req, res) {
-  const output = await getDespatchEnvelopById(req);
+    const output = await getDespatchEnvelopById(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+despatchEnvelopRepository.getByLetterNo = async function (req, res) {
+    const output = await getDespatchEnvelopByLetterNo(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+
+despatchEnvelopRepository.getByCreatedBy = async function (req, res) {
+  const output = await getTDespatchEnvelopByCreatedBy(req);
   res.status(output.statusCode);
   res.send(output);
 };
 
-despatchEnvelopRepository.getByLetterNo = async function (req, res) {
-  const output = await getDespatchEnvelopByLetterNo(req);
+
+despatchEnvelopRepository.getByCreatedFor = async function (req, res) {
+  const output = await getTDespatchEnvelopByCreatedFor(req);
   res.status(output.statusCode);
   res.send(output);
 };
 
 despatchEnvelopRepository.delete = async function (req, res) {
-  const output = await deleteDespatchEnvelopById(req);
-  res.status(output.statusCode);
-  res.send(output);
+    const output = await deleteDespatchEnvelopById(req);
+    res.status(output.statusCode);
+    res.send(output);
 };
 
 despatchEnvelopRepository.update = async function (req, res) {
-  const output = await updateDespatchEnvelopById(req);
-  res.status(output.statusCode);
-  res.send(output);
+    const output = await updateDespatchEnvelopById(req);
+    res.status(output.statusCode);
+    res.send(output);
 };
-

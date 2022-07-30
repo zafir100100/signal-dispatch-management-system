@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const User = require('../models/tables/user_info');
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
@@ -8,6 +9,29 @@ async function createUser(req) {
     const output = new ResponseDto();
     try {
         const result = await sequelize.transaction(async (t) => {
+            const userCheckUserName = await User.findOne({
+                where: {
+                    user_name: req.body.user_name,
+                },
+            });
+
+            if (userCheckUserName) {
+                output.message = 'The given user name already exists.';
+                output.statusCode = 409;
+                return output;
+            }
+
+            const userCheckEmail = await User.findOne({
+                where: {
+                    user_email: req.body.user_email,
+                },
+            });
+            if (userCheckEmail) {
+                output.message = 'The given email already exists.';
+                output.statusCode = 409;
+                return output;
+            }
+
             const maxId = ((await User.max('id')) ?? 0) + 1;
             req.body.id = maxId;
             const user = await User.create(req.body, { transaction: t });
@@ -46,6 +70,36 @@ async function getUserById(req) {
         }
 
         output.message = 'User found with the given id.';
+        output.statusCode = 200;
+        output.payload = {
+            output: user,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
+async function getUserByUserName(req) {
+    const output = new ResponseDto();
+    try {
+        const user = await User.findOne({
+            where: {
+                user_name: req.body.user_name,
+            },
+        });
+
+        if (!user) {
+            output.message = 'No user found with the given user name.';
+            output.statusCode = 404;
+            return output;
+        }
+
+        output.message = 'User found with the given user name.';
         output.statusCode = 200;
         output.payload = {
             output: user,
@@ -180,6 +234,71 @@ async function getUserByUserAndPassword(req) {
     }
 }
 
+async function getAllUser() {
+    const output = new ResponseDto();
+    try {
+        const user = await User.findAll({
+            order: [
+                ['user_full_name', 'ASC'],
+                ['id', 'DESC'],
+            ],
+        });
+
+        if (!user) {
+            output.message = 'No user found.';
+            output.statusCode = 404;
+            return output;
+        }
+
+        output.message = 'List of users';
+        output.statusCode = 200;
+        output.payload = {
+            output: user,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
+async function getUserSearchByFullName(req) {
+    const output = new ResponseDto();
+    try {
+        const user = await User.findAll({
+            where: {
+                [Op.substring]: req.body.user_full_name,
+            },
+            order: [
+                ['user_full_name', 'ASC'],
+                ['id', 'DESC'],
+            ],
+        });
+
+        if (!user) {
+            output.message = 'No user found.';
+            output.statusCode = 404;
+            return output;
+        }
+
+        output.message = 'List of users';
+        output.statusCode = 200;
+        output.payload = {
+            output: user,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
 userRepository.create = async function (req, res) {
     const output = await createUser(req);
     res.status(output.statusCode);
@@ -192,8 +311,26 @@ userRepository.getById = async function (req, res) {
     res.send(output);
 };
 
+userRepository.getAll = async function (req, res) {
+    const output = await getAllUser(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+userRepository.getByUn = async function (req, res) {
+    const output = await getUserByUserName(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
 userRepository.getByUnAndPass = async function (req, res) {
     const output = await getUserByUserAndPassword(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+userRepository.getByLikeFln = async function (req, res) {
+    const output = await getUserSearchByFullName(req);
     res.status(output.statusCode);
     res.send(output);
 };
