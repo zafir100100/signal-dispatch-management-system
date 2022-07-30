@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const conn = {};
 
 const PGHOST = "localhost";
 const PGDATABASE = "signal_dispatch_handler";
@@ -21,4 +22,7 @@ try {
   console.error("Unable to connect to the database:", error);
 }
 
-module.exports = sequelize;
+conn.sequelize = sequelize;
+conn.Sequelize = Sequelize;
+
+module.exports = conn;
