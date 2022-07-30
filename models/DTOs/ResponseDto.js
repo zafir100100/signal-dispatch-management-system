@@ -1,8 +1,8 @@
-const ResponseDto = {
-    Message: 'Operation failed. Something went wrong. Please try again later',
-    IsSuccess: false,
-    StatusCode: 0,
-    Payload: null
+class ResponseDto {
+    message = 'Operation failed. Something went wrong. Please try again later';
+    isSuccess = false;
+    statusCode = 500;
+    payload = null;
 }
 
 module.exports = ResponseDto;
