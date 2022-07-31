@@ -13,6 +13,7 @@ DespatchEnvelop.init({
   from_address: DataTypes.STRING,
   to_address: DataTypes.STRING,
   precedance: DataTypes.STRING,
+  security_classification: DataTypes.STRING,
   time_of_receive: DataTypes.STRING,
   despatch_status: DataTypes.STRING,
   despatch_type: DataTypes.STRING,
