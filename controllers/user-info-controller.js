@@ -30,7 +30,7 @@ router.post("/get-user-like-fullname", (req, res) =>
     userInfoRepository.getByLikeFln(req, res)
 );
 
-router.post("/get-all-user", (req, res) =>
+router.get("/get-all-user", (req, res) =>
     userInfoRepository.getAll(req, res)
 );
 
