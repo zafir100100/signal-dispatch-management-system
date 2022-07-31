@@ -57,6 +57,7 @@ async function getDespatchEnvelopById(req) {
         }
 
         output.message = 'Despatch Envelop found with the given id.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: despatchEnvelop,
@@ -87,6 +88,7 @@ async function getDespatchEnvelopByLetterNo(req) {
         }
 
         output.message = 'Despatch Envelop found with the given letter no.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: despatchEnvelop,

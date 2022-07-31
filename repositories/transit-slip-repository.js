@@ -57,6 +57,7 @@ async function getTransitSlipById(req) {
         }
 
         output.message = 'Transit Slip found with the given id.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: transitSlip,
@@ -87,6 +88,7 @@ async function getTransitSlipBySlipNo(req) {
         }
 
         output.message = 'Transit Slip found with the given transit slip no.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: transitSlip,

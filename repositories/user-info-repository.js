@@ -70,6 +70,7 @@ async function getUserById(req) {
         }
 
         output.message = 'User found with the given id.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: user,
@@ -100,6 +101,7 @@ async function getUserByUserName(req) {
         }
 
         output.message = 'User found with the given user name.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: user,
@@ -220,6 +222,7 @@ async function getUserByUserAndPassword(req) {
         }
 
         output.message = 'User found with the given credential.';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: user,
@@ -251,6 +254,7 @@ async function getAllUser() {
         }
 
         output.message = 'List of users';
+        output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
             output: user,
