@@ -224,37 +224,26 @@ async function getTransitSlipByTransitFrom(req) {
 
 async function getTransitSlipByTransitTo(req) {
     const output = new ResponseDto();
-    try {
-        const result = await sequelize.transaction(async (t) => {
-            const transitSlips = await TransitSlip.findAll({
-                where: {
-                    transit_to: req.body.transit_to,
-                },
-                order: [['id', 'desc']],
-            });
+    const transitSlips = await TransitSlip.findAll({
+        where: {
+            transit_to: req.body.transit_to,
+        },
+        order: [['id', 'desc']],
+    });
 
-            if (!transitSlips) {
-                output.message = 'No Transit Slip exists by the given criteria.';
-                output.statusCode = 409;
-                return output;
-            }
-
-            output.message = 'List of transit slip for the given user';
-            output.isSuccess = true;
-            output.statusCode = 200;
-            output.payload = {
-                output: transitSlips,
-            };
-        });
-
-        return output;
-    } catch (error) {
-        output.payload = {
-            errorDetails: error,
-        };
-
+    if (!transitSlips) {
+        output.message = 'No Transit Slip exists by the given criteria.';
+        output.statusCode = 404;
         return output;
     }
+
+    output.message = 'List of transit slip for the given user';
+    output.isSuccess = true;
+    output.statusCode = 200;
+    output.payload = {
+        output: transitSlips,
+    };
+    return output;
 }
 
 transitSlipRepository.create = async function (req, res) {

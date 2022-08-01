@@ -6,7 +6,7 @@ router.post("/create-transit-slip", (req, res) =>
     transitSlipRepository.create(req, res)
 );
 
-router.post("/get-user-by-id", (req, res) =>
+router.post("/get-transit-slip-by-id", (req, res) =>
     transitSlipRepository.getById(req, res)
 );
 
@@ -26,7 +26,7 @@ router.post("/get-transit-slip-by-user", (req, res) =>
     transitSlipRepository.getAllByUser(req, res)
 );
 
-router.post("/get-transit-slip-by-user", (req, res) =>
+router.post("/get-transit-slip-for-user", (req, res) =>
     transitSlipRepository.getAllForUser(req, res)
 );
 module.exports = router
