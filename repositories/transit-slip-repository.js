@@ -187,13 +187,13 @@ async function updateTransitSlipById(req) {
     }
 }
 
-async function getTransitSlipByCreatedBy(req) {
+async function getTransitSlipByTransitFrom(req) {
     const output = new ResponseDto();
     try {
         const result = await sequelize.transaction(async (t) => {
             const transitSlips = await TransitSlip.findAll({
                 where: {
-                    created_by: req.body.created_by,
+                    transit_from: req.body.transit_from,
                 },
                 order: [['id', 'desc']],
             });
@@ -205,6 +205,41 @@ async function getTransitSlipByCreatedBy(req) {
             }
 
             output.message = 'List of transit slip by the given user';
+            output.isSuccess = true;
+            output.statusCode = 200;
+            output.payload = {
+                output: transitSlips,
+            };
+        });
+
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
+async function getTransitSlipByTransitTo(req) {
+    const output = new ResponseDto();
+    try {
+        const result = await sequelize.transaction(async (t) => {
+            const transitSlips = await TransitSlip.findAll({
+                where: {
+                    transit_to: req.body.transit_to,
+                },
+                order: [['id', 'desc']],
+            });
+
+            if (!transitSlips) {
+                output.message = 'No Transit Slip exists by the given criteria.';
+                output.statusCode = 409;
+                return output;
+            }
+
+            output.message = 'List of transit slip for the given user';
             output.isSuccess = true;
             output.statusCode = 200;
             output.payload = {
@@ -253,7 +288,13 @@ transitSlipRepository.update = async function (req, res) {
 };
 
 transitSlipRepository.getAllByUser = async function (req, res) {
-    const output = await getTransitSlipByCreatedBy(req);
+    const output = await getTransitSlipByTransitFrom(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+transitSlipRepository.getAllForUser = async function (req, res) {
+    const output = await getTransitSlipByTransitTo(req);
     res.status(output.statusCode);
     res.send(output);
 };
