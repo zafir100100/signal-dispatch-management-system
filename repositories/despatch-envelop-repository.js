@@ -257,6 +257,37 @@ async function getDespatchEnvelopByCreatedFor(req) {
     }
 }
 
+async function getAllDespatchEnvelop() {
+    const output = new ResponseDto();
+    try {
+        const user = await DespatchEnvelop.findAll({
+            order: [
+                ['id', 'DESC'],
+            ],
+        });
+
+        if (!user) {
+            output.message = 'No despatch envelop found.';
+            output.statusCode = 404;
+            return output;
+        }
+
+        output.message = 'List of despatch envelop.';
+        output.isSuccess = true;
+        output.statusCode = 200;
+        output.payload = {
+            output: user,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+
+        return output;
+    }
+}
+
 despatchEnvelopRepository.create = async function (req, res) {
     const output = await createDespatchEnvelop(req);
     res.status(output.statusCode);
@@ -265,6 +296,12 @@ despatchEnvelopRepository.create = async function (req, res) {
 
 despatchEnvelopRepository.getById = async function (req, res) {
     const output = await getDespatchEnvelopById(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+despatchEnvelopRepository.getAll = async function (req, res) {
+    const output = await getAllDespatchEnvelop();
     res.status(output.statusCode);
     res.send(output);
 };

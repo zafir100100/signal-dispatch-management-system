@@ -30,4 +30,8 @@ router.post("/get-despatch-envelop-by-for-user", (req, res) =>
     despatchEnvelopRepository.getByCreatedFor(req, res)
 );
 
+router.post("/get-all-despatch-envelop", (req, res) =>
+    despatchEnvelopRepository.getAll(req, res)
+);
+
 module.exports = router
