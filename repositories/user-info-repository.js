@@ -36,8 +36,8 @@ async function createUser(req) {
             const maxId = ((await User.max('id')) ?? 0) + 1;
             req.body.id = maxId;
             req.body.created_at = utilityRepository.getCurrentDateTime;
-            req.body.edited_at = utilityRepository.getCurrentDateTime;
-            req.body.edited_by = req.body.created_by;
+            req.body.updated_at = utilityRepository.getCurrentDateTime;
+            req.body.updated_by = req.body.created_by;
             const user = await User.create(req.body, { transaction: t });
 
             output.message = 'User Creation Successful.';

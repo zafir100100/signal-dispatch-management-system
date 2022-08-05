@@ -14,8 +14,8 @@ TransitSlip.init({
   name_of_courier: DataTypes.STRING,
   created_at: DataTypes.STRING,
   created_by: DataTypes.INTEGER,
-  edited_at: DataTypes.STRING,
-  edited_by: DataTypes.INTEGER
+  updated_at: DataTypes.STRING,
+  updated_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'transit_slip', freezeTableName: true });
 
 TransitSlip.sync({

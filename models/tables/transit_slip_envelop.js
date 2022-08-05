@@ -15,8 +15,8 @@ TransitSlipEnvelop.init({
   transit_to: DataTypes.STRING,
   created_at: DataTypes.STRING,
   created_by: DataTypes.INTEGER,
-  edited_at: DataTypes.STRING,
-  edited_by: DataTypes.INTEGER
+  updated_at: DataTypes.STRING,
+  updated_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'transit_slip_envelop', freezeTableName: true });
 
 TransitSlipEnvelop.sync({

@@ -15,8 +15,8 @@ DespatchEnvelopArchieve.init({
   security_classification: DataTypes.STRING,
   created_at: DataTypes.STRING,
   created_by: DataTypes.INTEGER,
-  edited_at: DataTypes.STRING,
-  edited_by: DataTypes.INTEGER
+  updated_at: DataTypes.STRING,
+  updated_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'despatch_envelop_archieve', freezeTableName: true });
 
 DespatchEnvelopArchieve.sync({
