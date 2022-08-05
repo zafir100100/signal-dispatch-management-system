@@ -15,7 +15,6 @@ User.init({
   user_rank: DataTypes.STRING,
   user_role: DataTypes.STRING,
   user_serving_unit: DataTypes.STRING,
-  user_status: DataTypes.STRING,
   created_at: DataTypes.STRING,
   created_by: DataTypes.INTEGER,
   edited_at: DataTypes.STRING,
