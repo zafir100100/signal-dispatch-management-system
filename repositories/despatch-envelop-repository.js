@@ -1,6 +1,7 @@
 const DespatchEnvelop = require('../models/tables/despatch_envelop');
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
+const utilityRepository = require('../repositories/utility-repository');
 
 const despatchEnvelopRepository = (module.exports = {});
 
@@ -21,6 +22,9 @@ async function createDespatchEnvelop(req) {
             }
             const maxId = ((await DespatchEnvelop.max('id')) ?? 0) + 1;
             req.body.id = maxId;
+            req.body.created_at = utilityRepository.getCurrentDateTime;
+            req.body.updated_at =  req.body.created_at 
+            req.body.updated_by = req.body.created_by;
             const despatchEnvelop = await DespatchEnvelop.create(req.body, { transaction: t });
 
             output.message = 'Despatch Envelop Creation Successful.';
