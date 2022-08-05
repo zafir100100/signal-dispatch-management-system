@@ -34,4 +34,8 @@ router.get("/get-all-user", (req, res) =>
     userInfoRepository.getAll(req, res)
 );
 
+router.post("/get-user-by-role", (req, res) =>
+    userInfoRepository.getByRole(req, res)
+);
+
 module.exports = router

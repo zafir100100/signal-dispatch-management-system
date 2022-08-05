@@ -89,6 +89,39 @@ async function getUserById(req) {
     }
 }
 
+async function getUserByRole(req) {
+    const output = new ResponseDto();
+    try {
+        const user = await User.findOne({
+            where: {
+                user_role: req.body.user_role,
+            },
+            order: [
+                ['id', 'DESC']
+            ],
+        });
+
+        if (!user) {
+            output.message = 'No user found with the given role.';
+            output.statusCode = 404;
+            return output;
+        }
+
+        output.message = 'User found with the given role.';
+        output.isSuccess = true;
+        output.statusCode = 200;
+        output.payload = {
+            output: user,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+        return output;
+    }
+}
+
 async function getUserByUserName(req) {
     const output = new ResponseDto();
     try {
@@ -351,6 +384,12 @@ userRepository.deleteById = async function (req, res) {
 
 userRepository.updateById = async function (req, res) {
     const output = await updateUser(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+userRepository.getByRole = async function (req, res) {
+    const output = await getUserByRole(req);
     res.status(output.statusCode);
     res.send(output);
 };
