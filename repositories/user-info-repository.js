@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const User = require('../models/tables/user_info');
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
+const utilityRepository = require('../repositories/utility-repository');
 
 const userRepository = (module.exports = {});
 
@@ -34,6 +35,7 @@ async function createUser(req) {
 
             const maxId = ((await User.max('id')) ?? 0) + 1;
             req.body.id = maxId;
+            req.body.created_at = utilityRepository.getCurrentDateTime;
             const user = await User.create(req.body, { transaction: t });
 
             output.message = 'User Creation Successful.';

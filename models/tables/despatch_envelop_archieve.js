@@ -1,11 +1,10 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require("../../utils/db-connection");
 
-class DespatchEnvelop extends Model { }
-DespatchEnvelop.init({
+class DespatchEnvelopArchieve extends Model { }
+DespatchEnvelopArchieve.init({
   id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true
+    type: DataTypes.INTEGER
   },
   letter_no: DataTypes.STRING,
   date_time_group: DataTypes.STRING,
@@ -18,10 +17,10 @@ DespatchEnvelop.init({
   created_by: DataTypes.INTEGER,
   edited_at: DataTypes.STRING,
   edited_by: DataTypes.INTEGER
-}, { sequelize, tableName: 'despatch_envelop', freezeTableName: true });
+}, { sequelize, tableName: 'despatch_envelop_archieve', freezeTableName: true });
 
-DespatchEnvelop.sync({
+DespatchEnvelopArchieve.sync({
   force: false,
 });
 
-module.exports = DespatchEnvelop;
+module.exports = DespatchEnvelopArchieve;
