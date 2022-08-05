@@ -10,6 +10,7 @@ TransitSlipDistribution.init({
   sent_from: DataTypes.INTEGER,
   sent_to: DataTypes.INTEGER,
   transit_slip_id: DataTypes.INTEGER,
+  created_at: DataTypes.DATE
 }, { sequelize, tableName: 'transit_slip_distribution', freezeTableName: true });
 
 TransitSlipDistribution.sync({
