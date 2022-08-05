@@ -9,7 +9,7 @@ DespatchEnvelopDistribution.init({
   },
   sent_from: DataTypes.INTEGER,
   sent_to: DataTypes.INTEGER,
-}, { sequelize, tableName: 'transit_slip_distribution', freezeTableName: true });
+}, { sequelize, tableName: 'despatch_envelop_distribution', freezeTableName: true });
 
 DespatchEnvelopDistribution.sync({
   force: false,
