@@ -102,12 +102,12 @@ async function getUserByRole(req) {
         });
 
         if (!user) {
-            output.message = 'No user found with the given role.';
+            output.message = 'No user found with the given role: ' + req.body.user_role;
             output.statusCode = 404;
             return output;
         }
 
-        output.message = 'User found with the given role.';
+        output.message = 'User found with the given role: ' + req.body.user_role;
         output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
