@@ -32,6 +32,39 @@ async function createDespatchEnvelopDistribution(req) {
     }
 }
 
+async function getDespatchEnvelopDistributionByReceiver(req) {
+    const output = new ResponseDto();
+    try {
+        const result = await sequelize.transaction(async (t) => {
+
+            const deds = await DespatchEnvelopDistribution.findAll({
+                where: {
+                    sent_to: req.body.sent_to,
+                },
+                order: ['id', 'desc']
+            });
+
+            if (!deds) {
+                output.message = 'No Despatch Envelop Distribution found';
+                output.statusCode = 404;
+                return output;
+            }
+            output.message = 'List of Despatch Envelop Distribution';
+            output.isSuccess = true;
+            output.statusCode = 200;
+            output.payload = {
+                output: deds,
+            };
+        });
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+        return output;
+    }
+}
+
 despatchEnvelopDistributionRepository.create = async function (req, res) {
     const output = await createDespatchEnvelopDistribution(req);
     res.status(output.statusCode);
