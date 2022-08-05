@@ -3,7 +3,7 @@ const DespatchEnvelopDistribution = require('../models/tables/despatch_envelop_d
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
 const utilityRepository = require('../repositories/utility-repository');
-const { QueryTypes } = require('sequelize');
+// const { QueryTypes } = require('sequelize');
 
 const despatchEnvelopDistributionRepository = (module.exports = {});
 
