@@ -17,7 +17,9 @@ User.init({
   user_serving_unit: DataTypes.STRING,
   user_status: DataTypes.STRING,
   created_at: DataTypes.STRING,
-  created_by: DataTypes.INTEGER
+  created_by: DataTypes.INTEGER,
+  edited_at: DataTypes.STRING,
+  edited_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'user_info', freezeTableName: true });
 
 User.sync({
