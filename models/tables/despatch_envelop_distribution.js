@@ -9,6 +9,7 @@ DespatchEnvelopDistribution.init({
   },
   sent_from: DataTypes.INTEGER,
   sent_to: DataTypes.INTEGER,
+  despatch_envelop_id: DataTypes.INTEGER,
 }, { sequelize, tableName: 'despatch_envelop_distribution', freezeTableName: true });
 
 DespatchEnvelopDistribution.sync({
