@@ -92,7 +92,7 @@ async function getUserById(req) {
 async function getUserByRole(req) {
     const output = new ResponseDto();
     try {
-        const user = await User.findOne({
+        const user = await User.findAll({
             where: {
                 user_role: req.body.user_role,
             },
