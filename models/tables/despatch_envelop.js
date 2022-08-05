@@ -14,9 +14,9 @@ DespatchEnvelop.init({
   to_address: DataTypes.STRING,
   precedance: DataTypes.STRING,
   security_classification: DataTypes.STRING,
-  created_at: DataTypes.STRING,
+  created_at: DataTypes.DATE,
   created_by: DataTypes.INTEGER,
-  updated_at: DataTypes.STRING,
+  updated_at: DataTypes.DATE,
   updated_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'despatch_envelop', freezeTableName: true });
 

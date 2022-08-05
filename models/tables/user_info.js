@@ -15,9 +15,9 @@ User.init({
   user_rank: DataTypes.STRING,
   user_role: DataTypes.STRING,
   user_serving_unit: DataTypes.STRING,
-  created_at: DataTypes.STRING,
+  created_at: DataTypes.DATE,
   created_by: DataTypes.INTEGER,
-  updated_at: DataTypes.STRING,
+  updated_at: DataTypes.DATE,
   updated_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'user_info', freezeTableName: true });
 

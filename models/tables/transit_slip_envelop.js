@@ -13,9 +13,9 @@ TransitSlipEnvelop.init({
   precedence: DataTypes.STRING,
   transit_from: DataTypes.STRING,
   transit_to: DataTypes.STRING,
-  created_at: DataTypes.STRING,
+  created_at: DataTypes.DATE,
   created_by: DataTypes.INTEGER,
-  updated_at: DataTypes.STRING,
+  updated_at: DataTypes.DATE,
   updated_by: DataTypes.INTEGER
 }, { sequelize, tableName: 'transit_slip_envelop', freezeTableName: true });
 
