@@ -227,40 +227,40 @@ async function getDespatchEnvelopByCreatedBy(req) {
     }
 }
 
-async function getDespatchEnvelopByCreatedFor(req) {
-    const output = new ResponseDto();
-    try {
-        const result = await sequelize.transaction(async (t) => {
-            const despatchEnvelop = await DespatchEnvelop.findAll({
-                where: {
-                    created_for: req.body.created_for,
-                },
-                order: [['id', 'desc']],
-            });
+// async function getDespatchEnvelopByCreatedFor(req) {
+//     const output = new ResponseDto();
+//     try {
+//         const result = await sequelize.transaction(async (t) => {
+//             const despatchEnvelop = await DespatchEnvelop.findAll({
+//                 where: {
+//                     created_for: req.body.created_for,
+//                 },
+//                 order: [['id', 'desc']],
+//             });
 
-            if (!despatchEnvelop) {
-                output.message = 'No Despatch Envelop exists by the given criteria.';
-                output.statusCode = 409;
-                return output;
-            }
+//             if (!despatchEnvelop) {
+//                 output.message = 'No Despatch Envelop exists by the given criteria.';
+//                 output.statusCode = 409;
+//                 return output;
+//             }
 
-            output.message = 'List of Despatch Envelop for the given user';
-            output.isSuccess = true;
-            output.statusCode = 200;
-            output.payload = {
-                output: despatchEnvelop,
-            };
-        });
+//             output.message = 'List of Despatch Envelop for the given user';
+//             output.isSuccess = true;
+//             output.statusCode = 200;
+//             output.payload = {
+//                 output: despatchEnvelop,
+//             };
+//         });
 
-        return output;
-    } catch (error) {
-        output.payload = {
-            errorDetails: error,
-        };
+//         return output;
+//     } catch (error) {
+//         output.payload = {
+//             errorDetails: error,
+//         };
 
-        return output;
-    }
-}
+//         return output;
+//     }
+// }
 
 async function getAllDespatchEnvelopSentToUser(req) {
     const output = new ResponseDto();
@@ -331,11 +331,11 @@ despatchEnvelopRepository.getByCreatedBy = async function (req, res) {
     res.send(output);
 };
 
-despatchEnvelopRepository.getByCreatedFor = async function (req, res) {
-    const output = await getDespatchEnvelopByCreatedFor(req);
-    res.status(output.statusCode);
-    res.send(output);
-};
+// despatchEnvelopRepository.getByCreatedFor = async function (req, res) {
+//     const output = await getDespatchEnvelopByCreatedFor(req);
+//     res.status(output.statusCode);
+//     res.send(output);
+// };
 
 despatchEnvelopRepository.delete = async function (req, res) {
     const output = await deleteDespatchEnvelopById(req);

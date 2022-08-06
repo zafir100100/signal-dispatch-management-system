@@ -26,7 +26,7 @@ router.post("/get-transit-slip-by-user", (req, res) =>
     transitSlipRepository.getAllByUser(req, res)
 );
 
-router.post("/get-transit-slip-for-user", (req, res) =>
+router.post("/get-all-transit-slip-for-user", (req, res) =>
     transitSlipRepository.getAllForUser(req, res)
 );
 module.exports = router
