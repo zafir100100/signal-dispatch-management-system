@@ -261,7 +261,7 @@ async function getDespatchEnvelopByCreatedFor(req) {
     }
 }
 
-async function getAllDespatchEnvelop() {
+async function getAllDespatchEnvelopSentToUser() {
     const output = new ResponseDto();
     try {
         const user = await DespatchEnvelop.findAll({
@@ -304,8 +304,8 @@ despatchEnvelopRepository.getById = async function (req, res) {
     res.send(output);
 };
 
-despatchEnvelopRepository.getAll = async function (req, res) {
-    const output = await getAllDespatchEnvelop();
+despatchEnvelopRepository.getAllForUser = async function (req, res) {
+    const output = await getAllDespatchEnvelopSentToUser();
     res.status(output.statusCode);
     res.send(output);
 };
