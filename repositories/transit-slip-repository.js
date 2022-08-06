@@ -3,6 +3,7 @@ const TransitSlipEnvelop = require('../models/tables/transit_slip_envelop');
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
 const utilityRepository = require('../repositories/utility-repository');
+const { QueryTypes } = require('sequelize');
 
 const transitSlipRepository = (module.exports = {});
 
@@ -10,17 +11,17 @@ async function createTransitSlip(req) {
     const output = new ResponseDto();
     try {
         const result = await sequelize.transaction(async (t) => {
-            // const transitSlipNoCheck = await TransitSlip.findOne({
-            //     where: {
-            //         transit_slip_no: req.body.transitSlip.transit_slip_no,
-            //     },
-            // });
+            const transitSlipNoCheck = await TransitSlip.findOne({
+                where: {
+                    transit_slip_no: req.body.transitSlip.transit_slip_no,
+                },
+            });
 
-            // if (transitSlipNoCheck) {
-            //     output.message = 'The given transit slip no already exists.';
-            //     output.statusCode = 409;
-            //     return output;
-            // }
+            if (transitSlipNoCheck) {
+                output.message = 'The given transit slip no already exists.';
+                output.statusCode = 409;
+                return output;
+            }
             const maxId = ((await TransitSlip.max('id')) ?? 0) + 1;
             req.body.transitSlip.id = maxId;
             req.body.transitSlip.created_at = utilityRepository.getCurrentDateTime;
@@ -255,26 +256,60 @@ async function getTransitSlipByTransitFrom(req) {
 
 async function getTransitSlipByTransitTo(req) {
     const output = new ResponseDto();
-    const transitSlips = await TransitSlip.findAll({
-        where: {
-            transit_to: req.body.transit_to,
-        },
-        order: [['id', 'desc']],
-    });
-
-    if (!transitSlips) {
-        output.message = 'No Transit Slip exists by the given criteria.';
-        output.statusCode = 404;
+    try {
+        const results = await sequelize.query(
+            `
+            select ts.*, ui.user_full_name  
+            from transit_slip ts 
+            join transit_slip_distribution tsd 
+            on ts.id = tsd.transit_slip_id 
+            join user_info ui 
+            on tsd.sent_to = ui.id 
+            where tsd.sent_to = ` + req.body.sent_to + `
+            order by tsd.id desc
+            `,
+            {
+                type: QueryTypes.SELECT
+            });
+        if (!results) {
+            output.message = 'No transit slip found.';
+            output.statusCode = 404;
+            return output;
+        }
+        let outputs = [];
+        let transitSlip = {};
+        let transitSlipEnvelop = [];
+        let len = results.length;
+        for (let i = 0; i < len; i++) {
+            transitSlip = results[i];
+            transitSlipEnvelop = await TransitSlipEnvelop.findAll({
+                where: {
+                    id: transitSlip?.id,
+                },
+                order: [['id', 'asc']],
+            });
+            op = {
+                transitSlip: transitSlip,
+                transitSlipEnvelop: transitSlipEnvelop,
+            };
+            outputs.push(op);
+        }
+        output.message = 'List of transit slip.';
+        output.isSuccess = true;
+        output.statusCode = 200;
+        output.payload = {
+            output: outputs,
+        };
+        return output;
+    } catch (error) {
+        output.message = 'Transit slip retrieval failed. Something went wrong. Please try again later.';
+        output.isSuccess = false;
+        output.statusCode = 500;
+        output.payload = {
+            errorDetails: error,
+        };
         return output;
     }
-
-    output.message = 'List of transit slip for the given user';
-    output.isSuccess = true;
-    output.statusCode = 200;
-    output.payload = {
-        output: transitSlips,
-    };
-    return output;
 }
 
 transitSlipRepository.create = async function (req, res) {
