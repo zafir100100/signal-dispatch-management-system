@@ -2,6 +2,7 @@ const DespatchEnvelop = require('../models/tables/despatch_envelop');
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
 const utilityRepository = require('../repositories/utility-repository');
+const { QueryTypes } = require('sequelize');
 
 const despatchEnvelopRepository = (module.exports = {});
 
@@ -23,7 +24,7 @@ async function createDespatchEnvelop(req) {
             const maxId = ((await DespatchEnvelop.max('id')) ?? 0) + 1;
             req.body.id = maxId;
             req.body.created_at = utilityRepository.getCurrentDateTime;
-            req.body.updated_at =  req.body.created_at 
+            req.body.updated_at = req.body.created_at
             req.body.updated_by = req.body.created_by;
             const despatchEnvelop = await DespatchEnvelop.create(req.body, { transaction: t });
 
@@ -261,16 +262,24 @@ async function getDespatchEnvelopByCreatedFor(req) {
     }
 }
 
-async function getAllDespatchEnvelopSentToUser() {
+async function getAllDespatchEnvelopSentToUser(req) {
     const output = new ResponseDto();
     try {
-        const user = await DespatchEnvelop.findAll({
-            order: [
-                ['id', 'DESC'],
-            ],
-        });
+        const results = await sequelize.query(
+            `
+            select de.*, ui.user_full_name  from despatch_envelop de 
+            join despatch_envelop_distribution ded 
+            on de.id = ded.despatch_envelop_id 
+            join user_info ui 
+            on ded.sent_from = ui.id 
+            where ded.sent_to = ` + req.body.sent_to + `
+            order by ded.id desc
+            `,
+            {
+                type: QueryTypes.SELECT
+            });
 
-        if (!user) {
+        if (!results) {
             output.message = 'No despatch envelop found.';
             output.statusCode = 404;
             return output;
@@ -280,7 +289,7 @@ async function getAllDespatchEnvelopSentToUser() {
         output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
-            output: user,
+            output: results,
         };
         return output;
     } catch (error) {
@@ -305,7 +314,7 @@ despatchEnvelopRepository.getById = async function (req, res) {
 };
 
 despatchEnvelopRepository.getAllForUser = async function (req, res) {
-    const output = await getAllDespatchEnvelopSentToUser();
+    const output = await getAllDespatchEnvelopSentToUser(req);
     res.status(output.statusCode);
     res.send(output);
 };
