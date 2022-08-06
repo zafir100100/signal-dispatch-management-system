@@ -88,11 +88,23 @@ async function getTransitSlipById(req) {
             return output;
         }
 
+        const transitSlipEnvelop = await TransitSlipEnvelop.findAll({
+            where: {
+                id: transitSlip?.id,
+            },
+            order: [['id', 'asc']],
+        });
+
+        op = {
+            transitSlip: transitSlip,
+            transitSlipEnvelop: transitSlipEnvelop
+        }
+
         output.message = 'Transit Slip found with the given id.';
         output.isSuccess = true;
         output.statusCode = 200;
         output.payload = {
-            output: transitSlip,
+            output: op,
         };
         return output;
     } catch (error) {
