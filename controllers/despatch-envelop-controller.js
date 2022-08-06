@@ -30,7 +30,7 @@ router.post("/get-despatch-envelop-by-for-user", (req, res) =>
     despatchEnvelopRepository.getByCreatedFor(req, res)
 );
 
-router.get("/get-all-despatch-envelop-for-user", (req, res) =>
+router.post("/get-all-despatch-envelop-for-user", (req, res) =>
     despatchEnvelopRepository.getAllForUser(req, res)
 );
 
