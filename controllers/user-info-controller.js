@@ -38,4 +38,8 @@ router.post("/get-user-by-role", (req, res) =>
     userInfoRepository.getByRole(req, res)
 );
 
+router.post("/get-user-like-role", (req, res) =>
+    userInfoRepository.getByLikeRole(req, res)
+);
+
 module.exports = router

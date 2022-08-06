@@ -340,6 +340,39 @@ async function getUserSearchByFullName(req) {
     }
 }
 
+async function getUserSearchByUserRole(req) {
+    const output = new ResponseDto();
+    try {
+        const user = await User.findAll({
+            where: {
+                user_role: { [Op.substring]: `%${req.body.user_role}%` },
+            },
+            order: [
+                ['id', 'DESC']
+            ],
+        });
+
+        if (!user) {
+            output.message = 'No user found with the given role: ' + req.body.user_role;
+            output.statusCode = 404;
+            return output;
+        }
+
+        output.message = 'User found with the given role: ' + req.body.user_role;
+        output.isSuccess = true;
+        output.statusCode = 200;
+        output.payload = {
+            output: user,
+        };
+        return output;
+    } catch (error) {
+        output.payload = {
+            errorDetails: error,
+        };
+        return output;
+    }
+}
+
 userRepository.create = async function (req, res) {
     const output = await createUser(req);
     res.status(output.statusCode);
@@ -390,6 +423,12 @@ userRepository.updateById = async function (req, res) {
 
 userRepository.getByRole = async function (req, res) {
     const output = await getUserByRole(req);
+    res.status(output.statusCode);
+    res.send(output);
+};
+
+userRepository.getByLikeRole = async function (req, res) {
+    const output = await getUserSearchByUserRole(req);
     res.status(output.statusCode);
     res.send(output);
 };
