@@ -1,6 +1,8 @@
 const TransitSlip = require('../models/tables/transit_slip');
+const TransitSlipEnvelop = require('../models/tables/transit_slip_envelop');
 const ResponseDto = require('../models/DTOs/ResponseDto');
 const sequelize = require('../utils/db-connection');
+const utilityRepository = require('../repositories/utility-repository');
 
 const transitSlipRepository = (module.exports = {});
 
@@ -8,31 +10,60 @@ async function createTransitSlip(req) {
     const output = new ResponseDto();
     try {
         const result = await sequelize.transaction(async (t) => {
-            const transitSlipNoCheck = await TransitSlip.findOne({
-                where: {
-                    transit_slip_no: req.body.transit_slip_no,
-                },
-            });
+            // const transitSlipNoCheck = await TransitSlip.findOne({
+            //     where: {
+            //         transit_slip_no: req.body.transitSlip.transit_slip_no,
+            //     },
+            // });
 
-            if (transitSlipNoCheck) {
-                output.message = 'The given transit slip no already exists.';
-                output.statusCode = 409;
+            // if (transitSlipNoCheck) {
+            //     output.message = 'The given transit slip no already exists.';
+            //     output.statusCode = 409;
+            //     return output;
+            // }
+            const maxId = ((await TransitSlip.max('id')) ?? 0) + 1;
+            req.body.transitSlip.id = maxId;
+            req.body.transitSlip.created_at = utilityRepository.getCurrentDateTime;
+            req.body.transitSlip.updated_at = req.body.transitSlip.created_at;
+            req.body.transitSlip.updated_by = req.body.transitSlip.created_by;
+            const transitSlip = await TransitSlip.create(req.body.transitSlip, { transaction: t });
+            if (!transitSlip) {
+                output.message = 'The given transit slip creation failed.';
+                output.statusCode = 400;
                 return output;
             }
-            const maxId = ((await TransitSlip.max('id')) ?? 0) + 1;
-            req.body.id = maxId;
-            const transitSlip = await TransitSlip.create(req.body, { transaction: t });
-
+            const maxId2 = ((await TransitSlipEnvelop.max('id')) ?? 0) + 1;
+            let len = req.body.transitSlipEnvelop.length;
+            for (let i = 0; i < len; i++) {
+                req.body.transitSlipEnvelop[i].transit_slip_id = transitSlip?.id;
+                req.body.transitSlipEnvelop[i].id = maxId2 + i;
+                req.body.transitSlipEnvelop[i].created_at = req.body.transitSlip.created_at;
+                req.body.transitSlipEnvelop[i].created_by = req.body.transitSlip.created_by;
+                req.body.transitSlipEnvelop[i].updated_at = req.body.transitSlip.updated_at;
+                req.body.transitSlipEnvelop[i].updated_by = req.body.transitSlip.updated_by;
+            }
+            const transitSlipEnvelops = await TransitSlipEnvelop.bulkCreate(req.body.transitSlipEnvelop, { transaction: t });
+            if (!transitSlipEnvelops) {
+                output.message = 'The given transit slip envelop creation failed.';
+                output.statusCode = 400;
+                return output;
+            }
             output.message = 'Transit Slip Creation Successful.';
             output.isSuccess = true;
             output.statusCode = 200;
             output.payload = {
-                output: transitSlip,
+                output: {
+                    transitSlip: transitSlip,
+                    transitSlipEnvelop: transitSlipEnvelops
+                },
             };
         });
 
         return output;
     } catch (error) {
+        output.message = 'Transit Slip Creation Failed. Something went wrong. Please try again later.';
+        output.isSuccess = false;
+        output.statusCode = 500;
         output.payload = {
             errorDetails: error,
         };

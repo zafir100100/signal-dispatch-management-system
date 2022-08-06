@@ -13,6 +13,8 @@ TransitSlipEnvelop.init({
   precedence: DataTypes.STRING,
   transit_from: DataTypes.STRING,
   transit_to: DataTypes.STRING,
+  local_despatch_time: DataTypes.STRING,
+  local_despatch_signature: DataTypes.STRING,
   created_at: DataTypes.DATE,
   created_by: DataTypes.INTEGER,
   updated_at: DataTypes.DATE,
