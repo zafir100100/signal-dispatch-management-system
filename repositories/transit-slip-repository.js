@@ -90,7 +90,7 @@ async function getTransitSlipById(req) {
 
         const transitSlipEnvelop = await TransitSlipEnvelop.findAll({
             where: {
-                id: transitSlip?.id,
+                transit_slip_id: transitSlip?.id,
             },
             order: [['id', 'asc']],
         });
