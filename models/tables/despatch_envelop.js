@@ -17,7 +17,8 @@ DespatchEnvelop.init({
   created_at: DataTypes.DATE,
   created_by: DataTypes.INTEGER,
   updated_at: DataTypes.DATE,
-  updated_by: DataTypes.INTEGER
+  updated_by: DataTypes.INTEGER,
+  status: DataTypes.STRING
 }, { sequelize, tableName: 'despatch_envelop', freezeTableName: true });
 
 DespatchEnvelop.sync({
